@@ -1,0 +1,28 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+body{
+    background: linear-gradient(to bottom , rgb(0, 183, 255), rgb(73, 197, 255), rgb(144, 220, 255));
+    height: 100vh;
+}
+
+#estruturas{
+    width: 33vw;
+}
+
+#abel{
+    width: 33vw;
+    
+}
+
+#abel img {
+    width: 300px;
+    height: 300px;
+}
+
+#loja{
+    width: 33vw;
+
+}
