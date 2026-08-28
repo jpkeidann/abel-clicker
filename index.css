@@ -6,23 +6,26 @@
 body{
     background: linear-gradient(to bottom , rgb(0, 183, 255), rgb(73, 197, 255), rgb(144, 220, 255));
     height: 100vh;
+    display: flex;
+    flex-direction: row;
 }
 
 #estruturas{
     width: 33vw;
+    height: 100vh;
+}
+
+canvas{
+    width: 33vw;
+    height: 100vh;
 }
 
 #abel{
     width: 33vw;
-    
-}
-
-#abel img {
-    width: 300px;
-    height: 300px;
+    height: 100vh;
 }
 
 #loja{
     width: 33vw;
-
+    height: 100vh;
 }
