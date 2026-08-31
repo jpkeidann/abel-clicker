@@ -2,17 +2,18 @@ let estruturas = {
     setas: {
         quantidade: 0,
         preco: 10,
-        APS: 0.1
+        APS: 0.1,
+        img: './img/setas.png'
     }
 }
 
-
+let abeus = 0
 let canvas = document.getElementById('canvas')
 let divAbel = document.getElementById('abel')
 let des = canvas.getContext('2d')
 
 function resizeCanvas() {
-    canvas.width = window.innerWidth * 0.33
+    canvas.width = window.innerWidth
     canvas.height = window.innerHeight
 }
 
@@ -30,10 +31,10 @@ resizeCanvas()
 const imgAbel = new Image(); // não sei o porque, mas se eu tirar essas 2 linhas de código o jogo quebra, então vou deixar assim 
 imgAbel.src = "./img/abel.png";
 
-let WAbel = canvas.width * 0.60 // se for alterar o valor, muda também no atualizar
-let HAbel = canvas.height * 0.30
-let XAbel = (canvas.width / 2) - (WAbel / 2)
-let YAbel = (canvas.height / 2) - (HAbel / 2)
+let WAbel = canvas.width * 0.2
+let HAbel = canvas.height * 0.2
+let XAbel = (canvas.width / 2) - (WAbel / 2) 
+let YAbel = (canvas.height / 2) - (HAbel / 2) 
 
 var angleInDegrees = 0;
 
@@ -47,56 +48,78 @@ function desAbel(degrees) {
     des.save();
     des.translate(canvas.width / 2, canvas.height / 2);
     des.rotate(degrees * Math.PI / 180);
-    des.drawImage(image, -WAbel / 2, -HAbel / 2 , WAbel, YAbel);
+    des.drawImage(image, -WAbel / 2, -HAbel / 2, WAbel, HAbel);
     des.restore();
 }
 
 let RAbel = 0
 let direcaoAbel = true
-function quantoGirar(){
-    console.log(direcaoAbel)
-    const velGyro = 0.5
-    if(RAbel > 50){
+function quantoGirar() {
+    const velGyro = 0.2
+    if (RAbel > 50) {
         direcaoAbel = false
-    }else if(RAbel < -50){
+    } else if (RAbel < -50) {
         direcaoAbel = true
     }
-    if(direcaoAbel === true){
+    if (direcaoAbel === true) {
         RAbel += velGyro
-    }else if(direcaoAbel === false){
+    } else if (direcaoAbel === false) {
         RAbel -= velGyro
     }
     return RAbel
 }
 
-let aumentarAbel = true
-function tamanhoAbel(){
-    // WAbel = canvas.width * 0.60
-    // HAbel = canvas.height * 0.30
-    XAbel = (canvas.width / 2) - (WAbel / 2)
-    YAbel = (canvas.height / 2) - (HAbel / 2)
-    const velGyro = 1
-    if(WAbel > 50){
-        aumentarAbel = false
-    }else if(WAbel < -50){
-        aumentarAbel = true
+let aumentarXAbel = true
+let aumentarHAbel = true
+function tamanhoAbel() {
+    const velGyro = 0.5
+    if (WAbel > 225) {
+        aumentarXAbel = false
+    } else if (WAbel < 175) {
+        aumentarXAbel = true
     }
-    if(aumentarAbel === true){
+    if (aumentarXAbel === true) {
         WAbel += velGyro
-    }else if(aumentarAbel === false){
+    } else if (aumentarXAbel === false) {
         WAbel -= velGyro
     }
-    if(YAbel > 50){
-        aumentarAbel = false
-    }else if(YAbel < -50){
-        aumentarAbel = true
+    if (HAbel > 225) {
+        aumentarHAbel = false
+    } else if (HAbel < 175) {
+        aumentarHAbel = true
     }
-    if(direcaoAbel === true){
-        YAbel += velGyro
-    }else if(aumentarAbel === false){
-        YAbel -= velGyro
+    if (aumentarHAbel === true) {
+        HAbel += velGyro
+    } else if (aumentarHAbel === false) {
+        HAbel -= velGyro
     }
 }
+
+// =================== TEXTOS NA TELA ===========================
+
+function desQtdeAbel() {
+    des.fillStyle = "rgba(255, 255, 255, 0.85)";
+    des.font = "bold 52px Jacquard12";
+    des.textAlign = "center";
+    des.fillText(`Abéus: ${abeus}`, canvas.width / 2, canvas.height * 0.1);
+
+}
+
+// =================== RECONHECIMENTO DE CLIQUE =========================
+
+
+canvas.addEventListener('click', (e) => {
+    const tam = 300
+    const hitboxX = (canvas.width / 2) - (tam / 2)
+    const hitboxy = (canvas.height / 2) - (tam / 2)
+
+    const mouseX = e.x
+    const mousey = e.y
+
+    if (mouseX > hitboxX && mouseX < (hitboxX + tam) && mousey > hitboxy && mousey < (hitboxy + tam)) {
+        abeus += 1
+    }
+})
 
 // =================== ATUALIZAÇÕES DE TELA ========================
 
@@ -107,6 +130,7 @@ function atualizar(deltaTime) {
 
 function desenha() {
     desAbel(quantoGirar(),)
+    desQtdeAbel()
 }
 
 let ultimoTempo = 0
