@@ -1,11 +1,18 @@
-let estruturas = {
+let ESTR = {
     setas: {
         quantidade: 0,
         preco: 10,
         APS: 0.1,
-        img: './img/setas.png'
+        img: './img/upgrades/seta.png',
+        w: 200,
+        h: 100,
+        y: 100,
+        x: 100,
+        texto: 'Comprar setas:',
     }
 }
+
+let estruturasPresentes = []
 
 let abeus = 0
 let canvas = document.getElementById('canvas')
@@ -26,7 +33,7 @@ window.addEventListener('resize', () => {
 
 resizeCanvas()
 
-// =================== ANIMAÇÂO ABEL ========================
+// =================== ANIMAÇÃO ABEL ========================
 
 const imgAbel = new Image(); // não sei o porque, mas se eu tirar essas 2 linhas de código o jogo quebra, então vou deixar assim 
 imgAbel.src = "./img/abel.png";
@@ -95,6 +102,22 @@ function tamanhoAbel() {
     }
 }
 
+const esperar = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+async function cliqueAbel(){
+    const velgyro = 10
+    for(let i = 0 ; i < 5 ; i++){
+        HAbel += velgyro 
+        WAbel += velgyro 
+        await esperar(10)
+    }
+    for(let i = 0 ; i < 5 ; i++){
+        HAbel -= velgyro
+        WAbel -= velgyro
+        await esperar(10)
+    }
+}
+
 // =================== TEXTOS NA TELA ===========================
 
 function desQtdeAbel() {
@@ -102,7 +125,6 @@ function desQtdeAbel() {
     des.font = "bold 52px Jacquard12";
     des.textAlign = "center";
     des.fillText(`Abéus: ${abeus}`, canvas.width / 2, canvas.height * 0.1);
-
 }
 
 // =================== RECONHECIMENTO DE CLIQUE =========================
@@ -115,22 +137,38 @@ canvas.addEventListener('click', (e) => {
 
     const mouseX = e.x
     const mousey = e.y
-
+    
     if (mouseX > hitboxX && mouseX < (hitboxX + tam) && mousey > hitboxy && mousey < (hitboxy + tam)) {
         abeus += 1
+        cliqueAbel()
     }
 })
+
+// =================== CONFERIR ABEUS =======================
+
+let setasAtv = true
+function confAbel(){
+    if(setasAtv){
+        const setaupg = new Estruturas(ESTR.setas.quantidade,ESTR.setas.preco,ESTR.setas.APS,ESTR.setas.img,ESTR.setas.w,ESTR.setas.h,ESTR.setas.x,ESTR.setas.y,ESTR.setas.texto)
+        estruturasPresentes.push(setaupg)
+        setasAtv = false
+        console.log(estruturasPresentes)
+    }
+}
 
 // =================== ATUALIZAÇÕES DE TELA ========================
 
 function atualizar(deltaTime) {
     tamanhoAbel()
+    confAbel()
 }
-
-
+ 
 function desenha() {
     desAbel(quantoGirar(),)
     desQtdeAbel()
+    estruturasPresentes.forEach(est =>{
+        est.des_upgrade(des,est.texto)
+    })
 }
 
 let ultimoTempo = 0
