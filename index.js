@@ -2,7 +2,7 @@ let ESTR = {
     setas: {
         quantidade: 0,
         preco: 10,
-        APS: 0.1,
+        APS: 0.10,
         img: './img/upgrades/seta.png',
         w: 200,
         h: 100,
@@ -124,7 +124,7 @@ function desQtdeAbel() {
     des.fillStyle = "rgba(255, 255, 255, 0.85)";
     des.font = "bold 52px Jacquard12";
     des.textAlign = "center";
-    des.fillText(`Abéus: ${abeus}`, canvas.width / 2, canvas.height * 0.1);
+    des.fillText(`Abéus: ${abeus.toFixed(1)}`, canvas.width / 2, canvas.height * 0.1);
 }
 
 // =================== RECONHECIMENTO DE CLIQUE =========================
@@ -142,6 +142,18 @@ canvas.addEventListener('click', (e) => {
         abeus += 1
         cliqueAbel()
     }
+
+    estruturasPresentes.forEach(est => {
+        if(mouseX > est.x && mouseX < (est.x + est.w) && mousey > est.y && mousey < (est.y + est.h)){
+            if(abeus >= est.preco){
+                est.quantidade += 1
+                abeus -= est.preco
+                est.preco = Math.floor(est.preco * 1.3)
+            }else{
+                alert('consiga mais abeus')
+            }
+        }
+    });
 })
 
 // =================== CONFERIR ABEUS =======================
@@ -154,6 +166,16 @@ function confAbel(){
         setasAtv = false
         console.log(estruturasPresentes)
     }
+}
+
+// ==================== ADICIONAR APS =======================
+
+async function APS() {
+    estruturasPresentes.forEach(est => {
+        abeus += est.APS * est.quantidade
+    });
+    await esperar(100)
+    APS()
 }
 
 // =================== ATUALIZAÇÕES DE TELA ========================
@@ -200,3 +222,5 @@ function main(tempoAtual) {
 }
 
 requestAnimationFrame((tempo) => main(tempo))
+
+APS()
