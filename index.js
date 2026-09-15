@@ -5,10 +5,21 @@ let ESTR = {
         APS: 0.10,
         img: './img/upgrades/seta.png',
         w: 200,
-        h: 100,
+        h: 150,
         y: 100,
         x: 100,
         texto: 'Comprar setas:',
+    },
+    agua_oxigenada: {
+        quantidade: 0,
+        preco: 100,
+        APS: 0.5,
+        img: './img/upgrades/agua_oxigenada.png',
+        w: 200,
+        h: 200,
+        y: 350,
+        x: 100,
+        texto: 'Comprar Água Oxigenada:',
     }
 }
 
@@ -121,7 +132,7 @@ async function cliqueAbel(){
 // =================== TEXTOS NA TELA ===========================
 
 function desQtdeAbel() {
-    des.fillStyle = "rgba(255, 255, 255, 0.85)";
+    des.fillStyle = "rgb(255, 255, 255)";
     des.font = "bold 52px Jacquard12";
     des.textAlign = "center";
     des.fillText(`Abéus: ${abeus.toFixed(1)}`, canvas.width / 2, canvas.height * 0.1);
@@ -159,11 +170,18 @@ canvas.addEventListener('click', (e) => {
 // =================== CONFERIR ABEUS =======================
 
 let setasAtv = true
+let aguaAtv = true
 function confAbel(){
     if(setasAtv){
         const setaupg = new Estruturas(ESTR.setas.quantidade,ESTR.setas.preco,ESTR.setas.APS,ESTR.setas.img,ESTR.setas.w,ESTR.setas.h,ESTR.setas.x,ESTR.setas.y,ESTR.setas.texto)
         estruturasPresentes.push(setaupg)
         setasAtv = false
+        console.log(estruturasPresentes)
+    }
+    if(aguaAtv){
+        const aguaupg = new Estruturas(ESTR.agua_oxigenada.quantidade,ESTR.agua_oxigenada.preco,ESTR.agua_oxigenada.APS,ESTR.agua_oxigenada.img,ESTR.agua_oxigenada.w,ESTR.agua_oxigenada.h,ESTR.agua_oxigenada.x,ESTR.agua_oxigenada.y,ESTR.agua_oxigenada.texto)
+        estruturasPresentes.push(aguaupg)
+        aguaAtv = false
         console.log(estruturasPresentes)
     }
 }
