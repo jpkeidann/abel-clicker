@@ -1,5 +1,5 @@
 class Upgrades{
-    constructor(preco, APS, img, w, h, x, y, ybase, texto) {
+    constructor(preco, APS, img, w, h, x, y, ybase, texto , efeito) {
         this.preco = preco
         this.APS = APS
         this.img = new Image()
@@ -11,6 +11,7 @@ class Upgrades{
         this.w = w
         this.h = h
         this.texto = texto
+        this.efeito = efeito
     }
 
     des_upgrade(des) {

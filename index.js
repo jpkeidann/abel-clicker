@@ -27,6 +27,20 @@ let ESTR = {
 
 let UPGR = {
     setas: {
+        preco: 10,
+        APS: 0.05,
+        img: './img/upgrades/seta.jpg',
+        w: 200,
+        h: 150,
+        y: 100,
+        x: 1500,
+        ybase: 100,
+        texto: 'MAIS setas',
+        efeito: () => {
+            ESTR.setas.APS = ESTR.setas.APS * 200
+        },
+    },
+    agua_oxigenada: {
         preco: 100,
         APS: 0.05,
         img: './img/upgrades/seta.jpg',
@@ -36,7 +50,7 @@ let UPGR = {
         x: 1500,
         ybase: 100,
         texto: 'MAIS setas',
-        funcao: () => alert('funcao de upgrade de setas'),
+        efeito: () => alert('funcao de upgrade de agua'),
     },
 }
 
@@ -260,7 +274,7 @@ canvas.addEventListener('click', (e) => {
                 upgradesPresentes = upgradesPresentes.filter(upgrade => upgrade !== upg);
                 abeus -= upg.preco
                 upg.preco = Math.floor(upg.preco * 1.3)
-                upg.funcao();
+                upg.efeito();
             } else {
                 alert('consiga mais abeus')
             }
@@ -290,14 +304,14 @@ function confESTR() {
 let setaUpg1 = true
 let aguaUpg1 = true
 function confUPG() {
-    if (setaUpg1 && abeus > 3) {
-        const setaupg = new Upgrades(UPGR.setas.preco, UPGR.setas.APS, UPGR.setas.img, UPGR.setas.w, UPGR.setas.h, UPGR.setas.x, UPGR.setas.y, UPGR.setas.ybase, UPGR.setas.texto)
+    if (setaUpg1 && abeus > 2) {
+        const setaupg = new Upgrades(UPGR.setas.preco, UPGR.setas.APS, UPGR.setas.img, UPGR.setas.w, UPGR.setas.h, UPGR.setas.x, UPGR.setas.y, UPGR.setas.ybase, UPGR.setas.texto , UPGR.setas.efeito)
         upgradesPresentes.push(setaupg)
         setaUpg1 = false
         console.log(upgradesPresentes)
     }
     if (aguaUpg1 && abeus > 250) {
-        const aguaupg = new Upgrades(UPGR.agua_oxigenada.preco, UPGR.agua_oxigenada.APS, UPGR.agua_oxigenada.img, UPGR.agua_oxigenada.w, UPGR.agua_oxigenada.h, UPGR.agua_oxigenada.x, UPGR.agua_oxigenada.y, UPGR.agua_oxigenada.ybase, UPGR.agua_oxigenada.texto)
+        const aguaupg = new Upgrades(UPGR.agua_oxigenada.preco, UPGR.agua_oxigenada.APS, UPGR.agua_oxigenada.img, UPGR.agua_oxigenada.w, UPGR.agua_oxigenada.h, UPGR.agua_oxigenada.x, UPGR.agua_oxigenada.y, UPGR.agua_oxigenada.ybase, UPGR.agua_oxigenada.texto, UPGR.agua_oxigenada.efeito)
         upgradesPresentes.push(aguaupg)
         aguaUpg1 = false
         console.log(upgradesPresentes)
@@ -330,6 +344,7 @@ function atualizar(deltaTime) {
     tamanhoAbel()
     confESTR()
     confUPG()
+    console.log(ESTR.setas.APS)
 }
 
 function desenha() {
