@@ -1,11 +1,6 @@
 @font-face {
-    font-family: 'JacquardaBastarda9';
-    src: url('./fonts/JacquardaBastarda9-Regular.ttf') format('truetype');
-}
-
-@font-face {
-    font-family: 'Jacquard12';
-    src: url('./fonts/Jacquard12-Regular.ttf') format('truetype');
+    font-family: 'dekko';
+    src: url('./fonts/Dekko-Regular.ttf') format('truetype');
 }
 
 *{

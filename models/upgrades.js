@@ -1,6 +1,5 @@
-class Estruturas {
-    constructor(quantidade, preco, APS, img, w, h, x, y, ybase, texto) {
-        this.quantidade = quantidade
+class Upgrades{
+    constructor(preco, APS, img, w, h, x, y, ybase, texto) {
         this.preco = preco
         this.APS = APS
         this.img = new Image()
@@ -22,13 +21,6 @@ class Estruturas {
         des.fillRect(this.x , this.y - 60, this.w, 60);
         des.fillStyle = "white";
         des.fillText(this.texto, this.x + (this.w / 2), this.y - 35, this.w, this.h)
-        if(abeus >= this.preco){
-            des.fillStyle = "green";
-        }  else {
-            des.fillStyle = "red";
-        }
         des.fillText(this.preco, this.x + (this.w / 2), this.y - 5, this.w, this.h)
-        des.fillStyle = "black";
-        des.fillText(this.quantidade, this.x + 10, this.y + this.h - 5, this.w, this.h)
     }
 }

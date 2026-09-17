@@ -2,28 +2,46 @@ let ESTR = {
     setas: {
         quantidade: 0,
         preco: 10,
-        APS: 0.10,
-        img: './img/upgrades/seta.png',
+        APS: 0.05,
+        img: './img/estruturas/seta.png',
         w: 200,
         h: 150,
         y: 100,
-        x: 100,
+        x: 150,
+        ybase: 100,
         texto: 'Comprar setas:',
     },
     agua_oxigenada: {
         quantidade: 0,
-        preco: 100,
+        preco: 70,
         APS: 0.5,
-        img: './img/upgrades/agua_oxigenada.png',
+        img: './img/estruturas/agua_oxigenada.png',
         w: 200,
         h: 200,
         y: 350,
-        x: 100,
+        x: 150,
+        ybase: 350,
         texto: 'Comprar Água Oxigenada:',
     }
 }
 
+let UPGR = {
+    setas: {
+        preco: 100,
+        APS: 0.05,
+        img: './img/upgrades/seta.jpg',
+        w: 200,
+        h: 150,
+        y: 100,
+        x: 1500,
+        ybase: 100,
+        texto: 'MAIS setas',
+        funcao: () => alert('funcao de upgrade de setas'),
+    },
+}
+
 let estruturasPresentes = []
+let upgradesPresentes = []
 
 let abeus = 0
 let canvas = document.getElementById('canvas')
@@ -44,6 +62,72 @@ window.addEventListener('resize', () => {
 
 resizeCanvas()
 
+// =============== SCROLL DE UPGRADES ================
+
+let estScrollY = 0;
+
+function scrollEst() {
+    const estX = 0;
+    const estY = 0;
+    let estHeight = window.innerHeight;
+    let estWidth = window.innerWidth * 0.3;
+    
+    estruturasPresentes.forEach((est) => {
+        est.des_upgrade(des, est.texto)
+        est.y = est.ybase - scrollY;
+    });
+    
+    des.strokeStyle = "#000";
+    des.lineWidth = 2;
+    des.strokeRect(estX, estY, estWidth, estHeight);
+}
+
+window.addEventListener("wheel", (event) => {
+    const estX = 0;
+    const estY = 0;
+    let estHeight = window.innerHeight;
+    let estWidth = window.innerWidth * 0.3;
+    if (event.x <= estX + estWidth && event.x >= estX  && event.y <= estY + estHeight && event.y >= estY) {
+        let maxScroll = 400 * estruturasPresentes.length;
+        scrollY += event.deltaY;
+        
+        const limiteMaximo = maxScroll - estHeight;
+        scrollY = Math.max(0, Math.min(scrollY, limiteMaximo));
+    }
+});
+
+let upgScrollY = 0;
+
+function scrollUpg() {
+    const upgX = window.innerWidth * 0.7;
+    const upgY = 0;
+    let upgHeight = window.innerHeight;
+    let upgWidth = window.innerWidth * 0.3;
+
+    upgradesPresentes.forEach((upg) => {
+        upg.des_upgrade(des, upg.texto)
+        upg.y = upg.ybase - upgScrollY;
+    });
+
+    des.strokeStyle = "#000";
+    des.lineWidth = 2;
+    des.strokeRect(upgX, upgY, upgWidth, upgHeight);
+}
+
+window.addEventListener("wheel", (event) => {
+    const upgX = window.innerWidth * 0.7;
+    const upgY = 0;
+    let upgHeight = window.innerHeight;
+    let upgWidth = window.innerWidth * 0.3;
+    if (event.x <= upgX + upgWidth && event.x >= upgX  && event.y <= upgY + upgHeight && event.y >= upgY) {
+        let maxScroll = 400 * upgradesPresentes.length;
+        upgScrollY += event.deltaY;
+
+        const limiteMaximo = maxScroll - upgHeight;
+        upgScrollY = Math.max(0, Math.min(upgScrollY, limiteMaximo));
+    }
+});
+
 // =================== ANIMAÇÃO ABEL ========================
 
 const imgAbel = new Image(); // não sei o porque, mas se eu tirar essas 2 linhas de código o jogo quebra, então vou deixar assim 
@@ -51,8 +135,8 @@ imgAbel.src = "./img/abel.png";
 
 let WAbel = canvas.width * 0.2
 let HAbel = canvas.height * 0.2
-let XAbel = (canvas.width / 2) - (WAbel / 2) 
-let YAbel = (canvas.height / 2) - (HAbel / 2) 
+let XAbel = (canvas.width / 2) - (WAbel / 2)
+let YAbel = (canvas.height / 2) - (HAbel / 2)
 
 var angleInDegrees = 0;
 
@@ -61,6 +145,7 @@ image.onload = function () {
     des.drawImage(image, canvas.width / 2 - image.width / 2, canvas.height / 2 - image.width / 2);
 }
 image.src = "./img/abel.png";
+
 
 function desAbel(degrees) {
     des.save();
@@ -115,14 +200,14 @@ function tamanhoAbel() {
 
 const esperar = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
-async function cliqueAbel(){
+async function cliqueAbel() {
     const velgyro = 10
-    for(let i = 0 ; i < 5 ; i++){
-        HAbel += velgyro 
-        WAbel += velgyro 
+    for (let i = 0; i < 5; i++) {
+        HAbel += velgyro
+        WAbel += velgyro
         await esperar(10)
     }
-    for(let i = 0 ; i < 5 ; i++){
+    for (let i = 0; i < 5; i++) {
         HAbel -= velgyro
         WAbel -= velgyro
         await esperar(10)
@@ -133,13 +218,16 @@ async function cliqueAbel(){
 
 function desQtdeAbel() {
     des.fillStyle = "rgb(255, 255, 255)";
-    des.font = "bold 52px Jacquard12";
+    des.font = "bold 52px dekko";
     des.textAlign = "center";
     des.fillText(`Abéus: ${abeus.toFixed(1)}`, canvas.width / 2, canvas.height * 0.1);
+    des.font = "bold 24px dekko";
+    des.fillText(`Abéus por segundo: ${conferirAPS().toFixed(1)}`, canvas.width / 2, canvas.height * 0.15);
 }
 
 // =================== RECONHECIMENTO DE CLIQUE =========================
 
+let poderClique = 1
 
 canvas.addEventListener('click', (e) => {
     const tam = 300
@@ -148,19 +236,32 @@ canvas.addEventListener('click', (e) => {
 
     const mouseX = e.x
     const mousey = e.y
-    
+
     if (mouseX > hitboxX && mouseX < (hitboxX + tam) && mousey > hitboxy && mousey < (hitboxy + tam)) {
-        abeus += 1
+        abeus += poderClique
         cliqueAbel()
     }
 
     estruturasPresentes.forEach(est => {
-        if(mouseX > est.x && mouseX < (est.x + est.w) && mousey > est.y && mousey < (est.y + est.h)){
-            if(abeus >= est.preco){
+        if (mouseX > est.x && mouseX < (est.x + est.w) && mousey > est.y && mousey < (est.y + est.h)) {
+            if (abeus >= est.preco) {
                 est.quantidade += 1
                 abeus -= est.preco
                 est.preco = Math.floor(est.preco * 1.3)
-            }else{
+            } else {
+                alert('consiga mais abeus')
+            }
+        }
+    });
+
+    upgradesPresentes.forEach(upg => {
+        if (mouseX > upg.x && mouseX < (upg.x + upg.w) && mousey > upg.y && mousey < (upg.y + upg.h)) {
+            if (abeus >= upg.preco) {
+                upgradesPresentes = upgradesPresentes.filter(upgrade => upgrade !== upg);
+                abeus -= upg.preco
+                upg.preco = Math.floor(upg.preco * 1.3)
+                upg.funcao();
+            } else {
                 alert('consiga mais abeus')
             }
         }
@@ -171,19 +272,46 @@ canvas.addEventListener('click', (e) => {
 
 let setasAtv = true
 let aguaAtv = true
-function confAbel(){
-    if(setasAtv){
-        const setaupg = new Estruturas(ESTR.setas.quantidade,ESTR.setas.preco,ESTR.setas.APS,ESTR.setas.img,ESTR.setas.w,ESTR.setas.h,ESTR.setas.x,ESTR.setas.y,ESTR.setas.texto)
+function confESTR() {
+    if (setasAtv) {
+        const setaupg = new Estruturas(ESTR.setas.quantidade, ESTR.setas.preco, ESTR.setas.APS, ESTR.setas.img, ESTR.setas.w, ESTR.setas.h, ESTR.setas.x, ESTR.setas.y, ESTR.setas.ybase, ESTR.setas.texto)
         estruturasPresentes.push(setaupg)
         setasAtv = false
         console.log(estruturasPresentes)
     }
-    if(aguaAtv){
-        const aguaupg = new Estruturas(ESTR.agua_oxigenada.quantidade,ESTR.agua_oxigenada.preco,ESTR.agua_oxigenada.APS,ESTR.agua_oxigenada.img,ESTR.agua_oxigenada.w,ESTR.agua_oxigenada.h,ESTR.agua_oxigenada.x,ESTR.agua_oxigenada.y,ESTR.agua_oxigenada.texto)
+    if (aguaAtv && abeus > 20) {
+        const aguaupg = new Estruturas(ESTR.agua_oxigenada.quantidade, ESTR.agua_oxigenada.preco, ESTR.agua_oxigenada.APS, ESTR.agua_oxigenada.img, ESTR.agua_oxigenada.w, ESTR.agua_oxigenada.h, ESTR.agua_oxigenada.x, ESTR.agua_oxigenada.y, ESTR.agua_oxigenada.ybase, ESTR.agua_oxigenada.texto)
         estruturasPresentes.push(aguaupg)
         aguaAtv = false
         console.log(estruturasPresentes)
     }
+}
+
+let setaUpg1 = true
+let aguaUpg1 = true
+function confUPG() {
+    if (setaUpg1 && abeus > 3) {
+        const setaupg = new Upgrades(UPGR.setas.preco, UPGR.setas.APS, UPGR.setas.img, UPGR.setas.w, UPGR.setas.h, UPGR.setas.x, UPGR.setas.y, UPGR.setas.ybase, UPGR.setas.texto)
+        upgradesPresentes.push(setaupg)
+        setaUpg1 = false
+        console.log(upgradesPresentes)
+    }
+    if (aguaUpg1 && abeus > 250) {
+        const aguaupg = new Upgrades(UPGR.agua_oxigenada.preco, UPGR.agua_oxigenada.APS, UPGR.agua_oxigenada.img, UPGR.agua_oxigenada.w, UPGR.agua_oxigenada.h, UPGR.agua_oxigenada.x, UPGR.agua_oxigenada.y, UPGR.agua_oxigenada.ybase, UPGR.agua_oxigenada.texto)
+        upgradesPresentes.push(aguaupg)
+        aguaUpg1 = false
+        console.log(upgradesPresentes)
+    }
+}
+
+// -------- conferir aps -------
+
+function conferirAPS() {
+    let aps = 0
+    estruturasPresentes.forEach(est => {
+        aps += (est.APS * est.quantidade * 10)
+    })
+    return aps
 }
 
 // ==================== ADICIONAR APS =======================
@@ -200,15 +328,15 @@ async function APS() {
 
 function atualizar(deltaTime) {
     tamanhoAbel()
-    confAbel()
+    confESTR()
+    confUPG()
 }
- 
+
 function desenha() {
     desAbel(quantoGirar(),)
     desQtdeAbel()
-    estruturasPresentes.forEach(est =>{
-        est.des_upgrade(des,est.texto)
-    })
+    scrollEst()
+    scrollUpg()
 }
 
 let ultimoTempo = 0
@@ -233,8 +361,8 @@ function main(tempoAtual) {
 
     des.clearRect(0, 0, canvas.width, canvas.height);
 
-    desenha()
     atualizar(deltaTime)
+    desenha()
 
     requestAnimationFrame(main)
 }
