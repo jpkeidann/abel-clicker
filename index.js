@@ -1,17 +1,19 @@
 let ESTR = {
     setas: {
+        id: 1,
         quantidade: 0,
         preco: 10,
         APS: 0.05,
         img: './img/estruturas/seta.png',
         w: 200,
         h: 150,
-        y: 100,
-        x: 150,
+        y: 100 ,
+        x: window.innerWidth * 0.09,
         ybase: 100,
         texto: 'Comprar setas:',
     },
     agua_oxigenada: {
+        id: 2,
         quantidade: 0,
         preco: 70,
         APS: 0.5,
@@ -19,7 +21,7 @@ let ESTR = {
         w: 200,
         h: 200,
         y: 350,
-        x: 150,
+        x: window.innerWidth * 0.09,
         ybase: 350,
         texto: 'Comprar Água Oxigenada:',
     }
@@ -27,27 +29,25 @@ let ESTR = {
 
 let UPGR = {
     setas: {
-        preco: 10,
-        APS: 0.05,
+        preco: 100,
         img: './img/upgrades/seta.jpg',
         w: 200,
         h: 150,
         y: 100,
-        x: 1500,
+        x: window.innerWidth * 0.8,
         ybase: 100,
         texto: 'MAIS setas',
         efeito: () => {
-            ESTR.setas.APS = ESTR.setas.APS * 200
+            estruturasPresentes[estruturasPresentes.findIndex(est => est.id == 1)].APS *= 2
         },
     },
     agua_oxigenada: {
         preco: 100,
-        APS: 0.05,
         img: './img/upgrades/seta.jpg',
         w: 200,
         h: 150,
         y: 100,
-        x: 1500,
+        x: window.innerWidth * 0.8,
         ybase: 100,
         texto: 'MAIS setas',
         efeito: () => alert('funcao de upgrade de agua'),
@@ -65,6 +65,12 @@ let des = canvas.getContext('2d')
 function resizeCanvas() {
     canvas.width = window.innerWidth
     canvas.height = window.innerHeight
+    estruturasPresentes.forEach(estr => {
+        estr.x = window.innerWidth * 0.09
+    });
+    upgradesPresentes.forEach(upg =>{
+        upg.x = window.innerWidth * 0.8
+    });
 }
 
 window.addEventListener('resize', () => {
@@ -288,33 +294,29 @@ let setasAtv = true
 let aguaAtv = true
 function confESTR() {
     if (setasAtv) {
-        const setaupg = new Estruturas(ESTR.setas.quantidade, ESTR.setas.preco, ESTR.setas.APS, ESTR.setas.img, ESTR.setas.w, ESTR.setas.h, ESTR.setas.x, ESTR.setas.y, ESTR.setas.ybase, ESTR.setas.texto)
+        const setaupg = new Estruturas(ESTR.setas.id, ESTR.setas.quantidade, ESTR.setas.preco, ESTR.setas.APS, ESTR.setas.img, ESTR.setas.w, ESTR.setas.h, ESTR.setas.x, ESTR.setas.y, ESTR.setas.ybase, ESTR.setas.texto)
         estruturasPresentes.push(setaupg)
         setasAtv = false
-        console.log(estruturasPresentes)
     }
     if (aguaAtv && abeus > 20) {
-        const aguaupg = new Estruturas(ESTR.agua_oxigenada.quantidade, ESTR.agua_oxigenada.preco, ESTR.agua_oxigenada.APS, ESTR.agua_oxigenada.img, ESTR.agua_oxigenada.w, ESTR.agua_oxigenada.h, ESTR.agua_oxigenada.x, ESTR.agua_oxigenada.y, ESTR.agua_oxigenada.ybase, ESTR.agua_oxigenada.texto)
+        const aguaupg = new Estruturas(ESTR.agua_oxigenada.id, ESTR.agua_oxigenada.quantidade, ESTR.agua_oxigenada.preco, ESTR.agua_oxigenada.APS, ESTR.agua_oxigenada.img, ESTR.agua_oxigenada.w, ESTR.agua_oxigenada.h, ESTR.agua_oxigenada.x, ESTR.agua_oxigenada.y, ESTR.agua_oxigenada.ybase, ESTR.agua_oxigenada.texto)
         estruturasPresentes.push(aguaupg)
         aguaAtv = false
-        console.log(estruturasPresentes)
     }
 }
 
 let setaUpg1 = true
 let aguaUpg1 = true
 function confUPG() {
-    if (setaUpg1 && abeus > 2) {
-        const setaupg = new Upgrades(UPGR.setas.preco, UPGR.setas.APS, UPGR.setas.img, UPGR.setas.w, UPGR.setas.h, UPGR.setas.x, UPGR.setas.y, UPGR.setas.ybase, UPGR.setas.texto , UPGR.setas.efeito)
+    if (setaUpg1 && abeus > 30) {
+        const setaupg = new Upgrades(UPGR.setas.preco, UPGR.setas.img, UPGR.setas.w, UPGR.setas.h, UPGR.setas.x, UPGR.setas.y, UPGR.setas.ybase, UPGR.setas.texto , UPGR.setas.efeito)
         upgradesPresentes.push(setaupg)
         setaUpg1 = false
-        console.log(upgradesPresentes)
     }
     if (aguaUpg1 && abeus > 250) {
-        const aguaupg = new Upgrades(UPGR.agua_oxigenada.preco, UPGR.agua_oxigenada.APS, UPGR.agua_oxigenada.img, UPGR.agua_oxigenada.w, UPGR.agua_oxigenada.h, UPGR.agua_oxigenada.x, UPGR.agua_oxigenada.y, UPGR.agua_oxigenada.ybase, UPGR.agua_oxigenada.texto, UPGR.agua_oxigenada.efeito)
+        const aguaupg = new Upgrades(UPGR.agua_oxigenada.preco, UPGR.agua_oxigenada.img, UPGR.agua_oxigenada.w, UPGR.agua_oxigenada.h, UPGR.agua_oxigenada.x, UPGR.agua_oxigenada.y, UPGR.agua_oxigenada.ybase, UPGR.agua_oxigenada.texto, UPGR.agua_oxigenada.efeito)
         upgradesPresentes.push(aguaupg)
         aguaUpg1 = false
-        console.log(upgradesPresentes)
     }
 }
 
@@ -344,7 +346,6 @@ function atualizar(deltaTime) {
     tamanhoAbel()
     confESTR()
     confUPG()
-    console.log(ESTR.setas.APS)
 }
 
 function desenha() {

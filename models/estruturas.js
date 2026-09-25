@@ -1,16 +1,16 @@
 class Estruturas {
-    constructor(quantidade, preco, APS, img, w, h, x, y, ybase, texto) {
+    constructor(id, quantidade, preco, APS, img, w, h, x, y, ybase, texto) {
+        this.id = id
         this.quantidade = quantidade
         this.preco = preco
         this.APS = APS
         this.img = new Image()
         this.img.src = img
-
+        this.w = w
+        this.h = h
         this.x = x
         this.y = y
         this.ybase = ybase
-        this.w = w
-        this.h = h
         this.texto = texto
     }
 
